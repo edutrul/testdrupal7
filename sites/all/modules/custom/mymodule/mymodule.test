@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ * An example of simpletest.
+ */
+
+/**
+ * 
+ */
+class MyModuleTestCase extends DrupalWebTestCase {
+  protected $user;
+  function getInfo() {
+    return array(
+      'name' => t('MyModuleTestCase name'),
+      'description' => t('MyModuleTestCase desc'),
+      'group' => t('MyModuleTestCase'),
+    );
+  }
+
+  function setUp() {
+    $this->setup = TRUE;
+    $this->user = $this->drupalCreateUser(array('create simpletest_example content'));
+    $this->drupalLogin($this->user);
+  }
+
+  function tearDown() { }
+
+  function testCheckData() {
+
+    $this->assertTrue(TRUE);
+    $this->assertTrue(TRUE, 'GENIAL   ' . $this->randomName(1024));
+    debug('We are not running on the PIFR testing server ' . print_r(array(0,1,2,3) ,TRUE) . ', so will go ahead and catch the failure.');
+    $edit = array();
+    $edit['title'] = $this->randomName(8);
+    $edit["body[und][0][value]"] = $this->randomName(16);
+    $this->drupalPost('node/add/simpletest-example', $edit, t('Save'));
+    $this->assertText(t('Simpletest Example Node Type @title has been created.', array('@title' => $edit['title'])));
+  }
+}

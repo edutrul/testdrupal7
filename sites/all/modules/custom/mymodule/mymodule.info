@@ -1,0 +1,7 @@
+name = Mymodule test
+description = Mymodule test
+core = 7.x
+php = 5.x
+package = custom
+
+files[] = mymodule.test
