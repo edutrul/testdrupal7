@@ -30,6 +30,7 @@ class MyModuleTestCase extends DrupalWebTestCase {
     $this->assertTrue(TRUE);
     $this->assertTrue(TRUE, 'GENIAL   ' . $this->randomName(1024));
     debug('We are not running on the PIFR testing server ' . print_r(array(0,1,2,3) ,TRUE) . ', so will go ahead and catch the failure.');
+    
     $edit = array();
     $edit['title'] = $this->randomName(8);
     $edit["body[und][0][value]"] = $this->randomName(16);

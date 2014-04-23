@@ -1,1 +1,139 @@
+<?php
+/**
+ * @file
+ * TODO code goes here.
+ */
 
+/**
+ * Implements hook_menu().
+ *
+ * @return An array of menu items.
+ */
+function mymodule_menu() {
+  
+  $items = array();
+
+  $items['path'] = array(
+    'title' => 'title',
+    'description' => 'description',
+    'page callback' => 'mymodule_page',
+    'access callback' => TRUE,
+  );
+  
+  $items['form-mymodule'] = array(
+    'title' => 'Form Tutorial',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mymodule_form_example'),
+    'access callback' => TRUE,
+    'description' => 'A set of ten tutorials',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items['mymodule/autocomplete'] = array(
+    'title' => 'title',
+    'description' => 'description',
+    'page callback' => 'mymodule_autocomplete',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+function mymodule_page() {
+  
+  global $user;
+  
+  
+  $data = isset($_POST['REQUEST']) ? print_r($_POST, TRUE) : 'none' . time();
+  watchdog('mymodule', $data);
+  return $data;
+}
+
+/**
+ * Display a node editing form.
+ *
+ * @param $node
+ *   The node being added or edited.
+ * @param $form_state
+ *   The form state array.
+ *
+ * @return
+ *   An array containing the title and any custom form elements to be displayed
+ *   in the node editing form.
+ */
+function mymodule_form_example($form, &$form_state) {
+  $form = array();
+  if (isset($form_state['count'])) {
+    $count = $form_state['count'];
+  }
+  else {
+    $count = 1;
+  }
+  
+  for ($i = 0; $i <= $count; $i++) {
+    $form['input_1'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Enter item',
+      //'#autocomplete_path' => 'mymodule/autocomplete',
+    );
+  }
+  
+  
+  $form['count'] = array(
+    '#type' => 'item',
+    '#default_value' => 'This is the counter',
+    '#prefix' => '<div id="mymodule_form_example_counter">',
+    '#suffix' => '</div>',
+  );
+
+  
+    $form['input_auto'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Enter item',
+      '#autocomplete_path' => 'mymodule/autocomplete',
+    );
+
+  $form['add_more'] = array(
+    '#type' => 'submit',
+    '#value' => 'Add more',
+    //~ '#ajax' => array(
+      //~ 'callback' => 'mymodule_form_example_ajax',
+      //~ 'wrapper' => 'mymodule_form_example_counter',
+      //~ 'mehtod' => 'replace',
+    //~ ),
+  );
+
+
+  return $form;
+}
+
+function mymodule_form_example_submit($form, &$form_state) {
+  //~ dpm($form);
+  dpm($form_state);
+  //~ $form_state['count'] += 1;
+  //~ $form_state['rebuild'] = TRUE;
+}
+
+function mymodule_form_example_ajax($form, &$form_state) {
+  //print ($form_state['count_item']);
+  drupal_set_message($form_state['count']);
+  return $form_state['count'];
+}
+
+
+/**
+ * Implements hook_init().
+ */
+function mymodule_init() {
+  //~ firep('mymodule', 'optional title');
+  //~ print_r(array('cms' => 'Drupal'));
+  //~ $data = isset($_POST['REQUEST']) ? print_r($_POST, TRUE) : 'none' . time();
+  //~ watchdog('mymodule', $data);
+}
+
+function mymodule_autocomplete($string_hola, $string_hello) {
+  $arr_elements = array('hola', 'Hola', 'jalado');
+  if (in_array($string_hola, $arr_elements)) {
+    print drupal_json_output(array('Key' => 'value'));
+  }
+}
